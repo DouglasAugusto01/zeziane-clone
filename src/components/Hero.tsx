@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { withBasePath } from "@/lib/utils";
 
 export function Hero() {
   return (
@@ -23,13 +24,11 @@ export function Hero() {
           </Button>
         </div>
 
-        <div className="relative mx-auto aspect-square w-full max-w-xs sm:max-w-sm md:max-w-md">
-          <div className="absolute inset-x-10 bottom-6 h-10 rounded-full bg-foreground/15 blur-xl" />
-          <div className="absolute inset-x-16 bottom-0 h-24 rounded-[50%] bg-gradient-to-b from-stone-300 to-stone-200" />
+        <div className="relative mx-auto aspect-square w-full max-w-xs overflow-hidden rounded-[2rem] shadow-2xl sm:max-w-sm md:max-w-md">
           <img
-            src="https://placehold.co/600x600/1a1a1a/f3ece3?text=NOVA"
-            alt="Calçado premium NOVA em destaque"
-            className="relative mx-auto w-4/5 drop-shadow-2xl"
+            src={withBasePath("/logo-nova.jpg")}
+            alt="NOVA Calçados Premium"
+            className="h-full w-full object-cover"
           />
         </div>
       </div>
