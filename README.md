@@ -1,36 +1,39 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# NOVA | Calçados Premium
 
-## Getting Started
+Site estático (Next.js) com catálogo de produtos e envio de pedidos direto pelo WhatsApp (via link `wa.me`) — sem carrinho de pagamento e sem login.
 
-First, run the development server:
+🔗 **Site publicado:** https://douglasaugusto01.github.io/zeziane-clone/
+
+## Rodando localmente
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abra [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Configurar o número de WhatsApp
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Copie `.env.local.example` para `.env.local` e defina o número real da loja (DDI + DDD + número, só dígitos):
 
-## Learn More
+```bash
+NEXT_PUBLIC_WHATSAPP_NUMBER=55DDNNNNNNNNN
+```
 
-To learn more about Next.js, take a look at the following resources:
+Sem essa variável, o projeto usa um número de exemplo (placeholder).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Stack
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- [Next.js](https://nextjs.org) (App Router, export estático)
+- [Tailwind CSS](https://tailwindcss.com)
+- [shadcn/ui](https://ui.shadcn.com) + [Radix UI](https://www.radix-ui.com)
+- [lucide-react](https://lucide.dev) (ícones)
 
-## Deploy on Vercel
+## Build e publicação (GitHub Pages)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+GH_PAGES=true npm run build
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Gera a pasta `out/` já com o prefixo de caminho (`basePath`) correto para ser publicada em `https://<usuario>.github.io/zeziane-clone/`. O conteúdo dessa pasta é publicado na branch `gh-pages`.
