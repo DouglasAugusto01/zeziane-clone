@@ -3,6 +3,7 @@
 import { MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { ItemPreferencia } from "@/context/PreferenciasContext";
+import { formatarPreco } from "@/lib/utils";
 
 // Número de WhatsApp da loja (DDI + DDD + número, só dígitos).
 // Troque pelo número real no arquivo .env.local (NEXT_PUBLIC_WHATSAPP_NUMBER).
@@ -12,9 +13,9 @@ const NUMERO_WHATSAPP =
 function montarMensagem(itens: ItemPreferencia[], origin: string) {
   const linhasProdutos = itens
     .map(({ produto, tamanho, quantidade }) => {
-      const preco = (produto.preco_promocional_avista ?? produto.preco_avista)
-        .toFixed(2)
-        .replace(".", ",");
+      const preco = formatarPreco(
+        produto.preco_promocional_avista ?? produto.preco_avista
+      );
       return `• ${produto.nome} — Tam. ${tamanho} — Qtd: ${quantidade} — R$ ${preco}
   Link: ${origin}/produto/${produto.id}`;
     })
@@ -42,7 +43,7 @@ export function WhatsAppButton({ itens }: { itens: ItemPreferencia[] }) {
       className="gap-2 rounded-full bg-green-600 text-white hover:bg-green-500"
     >
       <MessageCircle className="size-4" />
-      Enviar no WhatsApp
+      Falar com vendedor
     </Button>
   );
 }

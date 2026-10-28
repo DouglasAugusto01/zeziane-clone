@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/select";
 import type { Produto } from "@/data/produtos";
 import { usePreferencias } from "@/context/PreferenciasContext";
+import { formatarPreco } from "@/lib/utils";
 
 export function ProdutoCard({ produto }: { produto: Produto }) {
   const { adicionar } = usePreferencias();
@@ -49,6 +50,16 @@ export function ProdutoCard({ produto }: { produto: Produto }) {
             {linha}
           </p>
         ))}
+
+        <div className="pt-1">
+          <p className="text-base font-semibold">
+            R$ {formatarPreco(produto.preco_promocional_avista ?? produto.preco_avista)}{" "}
+            <span className="text-xs font-normal text-muted-foreground">no Pix</span>
+          </p>
+          <p className="text-[11px] text-muted-foreground">
+            ou R$ {formatarPreco(produto.preco_aprazo)} em até 3x sem juros
+          </p>
+        </div>
       </CardContent>
 
       <CardFooter className="flex flex-col items-stretch gap-3 px-5">

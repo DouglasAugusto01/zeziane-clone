@@ -1,8 +1,8 @@
 import { produtos } from "@/data/produtos";
-import { ProdutoCard } from "@/components/ProdutoCard";
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { Diferenciais } from "@/components/Diferenciais";
+import { ColecaoProdutos } from "@/components/ColecaoProdutos";
 import { PreferenciasSection } from "@/components/PreferenciasSection";
 
 export default function Home() {
@@ -17,11 +17,7 @@ export default function Home() {
           Coleção exclusiva — selecione suas preferências
         </h2>
 
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 md:grid-cols-3 lg:grid-cols-4">
-          {produtos.map((produto) => (
-            <ProdutoCard key={produto.id} produto={produto} />
-          ))}
-        </div>
+        <ColecaoProdutos produtos={produtos} />
       </section>
 
       <PreferenciasSection />
