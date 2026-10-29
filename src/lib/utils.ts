@@ -10,3 +10,10 @@ export function formatarPreco(valor: number): string {
 export function withBasePath(path: string): string {
   return `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}${path}`
 }
+
+// Resolve a imagem de um produto: URLs externas (ex: placehold.co) passam
+// direto, caminhos locais de /public recebem o basePath via withBasePath.
+export function resolverImagem(src: string): string {
+  if (/^https?:\/\//.test(src)) return src
+  return withBasePath(src)
+}

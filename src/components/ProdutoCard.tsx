@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/select";
 import type { Produto } from "@/data/produtos";
 import { usePreferencias } from "@/context/PreferenciasContext";
-import { formatarPreco } from "@/lib/utils";
+import { formatarPreco, resolverImagem } from "@/lib/utils";
 
 export function ProdutoCard({ produto }: { produto: Produto }) {
   const { adicionar } = usePreferencias();
@@ -32,7 +32,7 @@ export function ProdutoCard({ produto }: { produto: Produto }) {
       <div className="relative aspect-square bg-secondary/50">
         <div className="absolute inset-x-8 bottom-4 h-16 rounded-[50%] bg-gradient-to-b from-stone-300/70 to-transparent" />
         <img
-          src={produto.imagem}
+          src={resolverImagem(produto.imagem)}
           alt={produto.nome}
           className="relative h-full w-full object-contain p-6"
         />

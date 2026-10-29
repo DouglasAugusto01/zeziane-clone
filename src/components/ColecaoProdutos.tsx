@@ -9,6 +9,7 @@ const filtrosGenero: { label: string; value: Genero | "todos" }[] = [
   { label: "Todos", value: "todos" },
   { label: "Feminino", value: "feminino" },
   { label: "Masculino", value: "masculino" },
+  { label: "Unissex", value: "unissex" },
 ];
 
 function FiltroPill({

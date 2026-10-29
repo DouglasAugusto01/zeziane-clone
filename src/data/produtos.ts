@@ -1,4 +1,4 @@
-export type Genero = "masculino" | "feminino";
+export type Genero = "masculino" | "feminino" | "unissex";
 
 export type Produto = {
   id: string;
@@ -67,8 +67,32 @@ export const produtos: Produto[] = [
     preco_avista: 269.99,
     preco_aprazo: 269.99,
     preco_promocional_avista: 249.99,
-    imagem: "https://placehold.co/400x400?text=Air+Max+Portal",
+    imagem: "/produtos/air-max-portal-rosa.jpg",
     tamanhos: ["34", "35", "36", "37", "38", "39"],
+  },
+  {
+    id: "6",
+    nome: "Nike Air Max Portal",
+    marca: "Nike",
+    genero: "unissex",
+    descricao: ["Lançamento • primeira linha", "Branco / Preto"],
+    preco_avista: 269.99,
+    preco_aprazo: 269.99,
+    preco_promocional_avista: 249.99,
+    imagem: "/produtos/air-max-portal-branco.jpg",
+    tamanhos: ["34", "35", "36", "37", "38", "39"],
+  },
+  {
+    id: "7",
+    nome: "Nike Dunk Low",
+    marca: "Nike",
+    genero: "masculino",
+    descricao: ["Duas opções de cadarços", "Primeira linha", "Branco / Preto"],
+    preco_avista: 239.99,
+    preco_aprazo: 239.99,
+    preco_promocional_avista: 219.99,
+    imagem: "/produtos/dunk-low-branco.jpg",
+    tamanhos: ["38", "39", "40", "41", "42", "43"],
   },
 ];
 
