@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { Menu, ShoppingCart, X } from "lucide-react";
 import { usePreferencias } from "@/context/PreferenciasContext";
 
 const links = [
-  { label: "Coleções", href: "#colecao" },
+  { label: "Coleções", href: "/colecao" },
   { label: "O Nosso Processo", href: "#processo" },
   { label: "Sobre Nós", href: "#sobre" },
 ];
@@ -18,7 +19,7 @@ export function Header() {
   return (
     <header className="sticky top-0 z-20 border-b border-border bg-background/95 backdrop-blur">
       <div className="container mx-auto flex items-center justify-between gap-3 px-4 py-4 sm:px-6">
-        <a href="#" className="flex min-w-0 items-center gap-2 sm:gap-3">
+        <Link href="/" className="flex min-w-0 items-center gap-2 sm:gap-3">
           <span className="flex size-8 shrink-0 items-center justify-center rounded-full border-2 border-foreground font-heading text-base font-semibold sm:size-9 sm:text-lg">
             N
           </span>
@@ -30,18 +31,28 @@ export function Header() {
               CALÇADOS PREMIUM
             </p>
           </div>
-        </a>
+        </Link>
 
         <nav className="hidden items-center gap-6 text-xs font-medium tracking-[0.15em] md:flex lg:gap-8">
-          {links.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className="uppercase text-foreground/80 transition-colors hover:text-foreground"
-            >
-              {link.label}
-            </a>
-          ))}
+          {links.map((link) =>
+            link.href.startsWith("#") ? (
+              <a
+                key={link.href}
+                href={link.href}
+                className="uppercase text-foreground/80 transition-colors hover:text-foreground"
+              >
+                {link.label}
+              </a>
+            ) : (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="uppercase text-foreground/80 transition-colors hover:text-foreground"
+              >
+                {link.label}
+              </Link>
+            )
+          )}
         </nav>
 
         <div className="flex shrink-0 items-center gap-2">
@@ -75,13 +86,23 @@ export function Header() {
           <ul className="flex flex-col gap-1">
             {links.map((link) => (
               <li key={link.href}>
-                <a
-                  href={link.href}
-                  onClick={() => setMenuAberto(false)}
-                  className="block rounded-lg px-2 py-2 text-xs font-medium uppercase tracking-[0.15em] text-foreground/80 transition-colors hover:bg-accent hover:text-foreground"
-                >
-                  {link.label}
-                </a>
+                {link.href.startsWith("#") ? (
+                  <a
+                    href={link.href}
+                    onClick={() => setMenuAberto(false)}
+                    className="block rounded-lg px-2 py-2 text-xs font-medium uppercase tracking-[0.15em] text-foreground/80 transition-colors hover:bg-accent hover:text-foreground"
+                  >
+                    {link.label}
+                  </a>
+                ) : (
+                  <Link
+                    href={link.href}
+                    onClick={() => setMenuAberto(false)}
+                    className="block rounded-lg px-2 py-2 text-xs font-medium uppercase tracking-[0.15em] text-foreground/80 transition-colors hover:bg-accent hover:text-foreground"
+                  >
+                    {link.label}
+                  </Link>
+                )}
               </li>
             ))}
           </ul>
