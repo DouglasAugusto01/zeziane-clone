@@ -12,10 +12,18 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { Produto } from "@/data/produtos";
+import { precoFinal } from "@/data/produtos";
 import { usePreferencias } from "@/context/PreferenciasContext";
-import { formatarPreco, resolverImagem } from "@/lib/utils";
+import { formatarPreco } from "@/lib/utils";
+import { ImagemLazy } from "@/components/ImagemLazy";
 
-export function ProdutoCard({ produto }: { produto: Produto }) {
+export function ProdutoCard({
+  produto,
+  index = 0,
+}: {
+  produto: Produto;
+  index?: number;
+}) {
   const { adicionar } = usePreferencias();
   const [tamanho, setTamanho] = useState(produto.tamanhos[0]);
   const [quantidade, setQuantidade] = useState(1);
@@ -28,11 +36,14 @@ export function ProdutoCard({ produto }: { produto: Produto }) {
   };
 
   return (
-    <Card className="gap-4 overflow-hidden border-border/70 bg-card py-0 pb-5 shadow-none">
+    <Card
+      className="animate-fade-in-up gap-4 overflow-hidden border-border/70 bg-card py-0 pb-5 shadow-none"
+      style={{ animationDelay: `${Math.min(index, 8) * 60}ms` }}
+    >
       <div className="relative aspect-square bg-secondary/50">
         <div className="absolute inset-x-8 bottom-4 h-16 rounded-[50%] bg-gradient-to-b from-stone-300/70 to-transparent" />
-        <img
-          src={resolverImagem(produto.imagem)}
+        <ImagemLazy
+          src={produto.imagem}
           alt={produto.nome}
           className="relative h-full w-full object-contain p-6"
         />
@@ -53,7 +64,7 @@ export function ProdutoCard({ produto }: { produto: Produto }) {
 
         <div className="pt-1">
           <p className="text-base font-semibold">
-            R$ {formatarPreco(produto.preco_promocional_avista ?? produto.preco_avista)}{" "}
+            R$ {formatarPreco(precoFinal(produto))}{" "}
             <span className="text-xs font-normal text-muted-foreground">no Pix</span>
           </p>
           <p className="text-[11px] text-muted-foreground">

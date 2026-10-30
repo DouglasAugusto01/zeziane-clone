@@ -160,3 +160,45 @@
     );
   background-size: 50px 50px;
 }
+
+/* Princípios de movimento: transições curtas (200–350ms), easing suave de
+   saída (ease-out) para entradas e simetria para saídas, com fallback
+   totalmente estático para quem prefere menos animação. */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.45s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out backwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in-up,
+  .animate-fade-in {
+    animation: none !important;
+  }
+  * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

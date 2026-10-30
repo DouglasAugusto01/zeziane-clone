@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { withBasePath } from "@/lib/utils";
 
@@ -17,10 +18,11 @@ export function Hero() {
             Calçados premium feitos à mão.
           </h1>
           <Button
+            asChild
             size="lg"
             className="w-full rounded-full bg-foreground px-8 text-background hover:bg-foreground/85 sm:w-auto"
           >
-            Ver Coleção
+            <Link href="/colecao">Ver Coleção</Link>
           </Button>
         </div>
 

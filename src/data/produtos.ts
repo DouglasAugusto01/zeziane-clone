@@ -1,10 +1,14 @@
 export type Genero = "masculino" | "feminino" | "unissex";
 
+export type Categoria = "Casual" | "Esportivo" | "Streetwear" | "Social";
+
 export type Produto = {
   id: string;
   nome: string;
   marca: string;
   genero: Genero;
+  categoria: Categoria;
+  cores: string[];
   descricao: string[];
   preco_avista: number;
   preco_aprazo: number;
@@ -19,6 +23,8 @@ export const produtos: Produto[] = [
     nome: "'NOVA' Icon Low-Top",
     marca: "NOVA",
     genero: "masculino",
+    categoria: "Casual",
+    cores: ["Preto"],
     descricao: ["Couro italiano certificado", "Solado anatômico Vibram"],
     preco_avista: 149.9,
     preco_aprazo: 169.9,
@@ -30,6 +36,8 @@ export const produtos: Produto[] = [
     nome: "'NOVA' Chelsea Boot",
     marca: "NOVA",
     genero: "masculino",
+    categoria: "Social",
+    cores: ["Preto"],
     descricao: ["Couro italiano certificado", "Solado anatômico Vibram"],
     preco_avista: 219.9,
     preco_aprazo: 249.9,
@@ -41,6 +49,8 @@ export const produtos: Produto[] = [
     nome: "'NOVA' Top Minimal",
     marca: "NOVA",
     genero: "feminino",
+    categoria: "Casual",
+    cores: ["Preto"],
     descricao: ["Couro italiano certificado", "Solado anatômico Vibram"],
     preco_avista: 179.9,
     preco_aprazo: 199.9,
@@ -52,6 +62,8 @@ export const produtos: Produto[] = [
     nome: "'Derby' Shoe",
     marca: "NOVA",
     genero: "masculino",
+    categoria: "Social",
+    cores: ["Preto"],
     descricao: ["Couro italiano certificado", "Solado anatômico Vibram"],
     preco_avista: 199.9,
     preco_aprazo: 229.9,
@@ -63,6 +75,8 @@ export const produtos: Produto[] = [
     nome: "Nike Air Max Portal",
     marca: "Nike",
     genero: "feminino",
+    categoria: "Esportivo",
+    cores: ["Rosa"],
     descricao: ["Lançamento • primeira linha", "Rosa / Pink"],
     preco_avista: 269.99,
     preco_aprazo: 269.99,
@@ -75,6 +89,8 @@ export const produtos: Produto[] = [
     nome: "Nike Air Max Portal",
     marca: "Nike",
     genero: "unissex",
+    categoria: "Esportivo",
+    cores: ["Branco", "Preto"],
     descricao: ["Lançamento • primeira linha", "Branco / Preto"],
     preco_avista: 269.99,
     preco_aprazo: 269.99,
@@ -87,6 +103,8 @@ export const produtos: Produto[] = [
     nome: "Nike Dunk Low",
     marca: "Nike",
     genero: "masculino",
+    categoria: "Streetwear",
+    cores: ["Branco", "Preto"],
     descricao: ["Duas opções de cadarços", "Primeira linha", "Branco / Preto"],
     preco_avista: 239.99,
     preco_aprazo: 239.99,
@@ -98,4 +116,8 @@ export const produtos: Produto[] = [
 
 export function getProdutoPorId(id: string): Produto | undefined {
   return produtos.find((p) => p.id === id);
+}
+
+export function precoFinal(produto: Produto): number {
+  return produto.preco_promocional_avista ?? produto.preco_avista;
 }
