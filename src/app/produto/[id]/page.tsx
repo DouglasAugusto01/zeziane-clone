@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 import { produtos, getProdutoPorId } from "@/data/produtos";
 import { Header } from "@/components/Header";
 import { ProdutoDetalhe } from "@/components/ProdutoDetalhe";
-import { PreferenciasSection } from "@/components/PreferenciasSection";
 
 export async function generateStaticParams() {
   return produtos.map((produto) => ({ id: produto.id }));
@@ -33,7 +32,6 @@ export default async function ProdutoPage(props: PageProps<"/produto/[id]">) {
     <div className="min-h-screen bg-background">
       <Header />
       <ProdutoDetalhe produto={produto} />
-      <PreferenciasSection />
     </div>
   );
 }

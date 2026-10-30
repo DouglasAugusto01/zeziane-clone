@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
-import { PreferenciasProvider } from "@/context/PreferenciasContext";
+import { CarrinhoProvider } from "@/context/CarrinhoContext";
+import { CarrinhoDrawer } from "@/components/CarrinhoDrawer";
 import { BotaoWhatsAppFlutuante } from "@/components/BotaoWhatsAppFlutuante";
 
 const geistSans = Geist({
@@ -32,8 +33,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} ${display.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-background">
-        <PreferenciasProvider>{children}</PreferenciasProvider>
-        <BotaoWhatsAppFlutuante />
+        <CarrinhoProvider>
+          {children}
+          <CarrinhoDrawer />
+          <BotaoWhatsAppFlutuante />
+        </CarrinhoProvider>
       </body>
     </html>
   );

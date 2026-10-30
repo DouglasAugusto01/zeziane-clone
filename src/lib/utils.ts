@@ -1,7 +1,11 @@
 export { cn } from "cn"
 
-export function formatarPreco(valor: number): string {
-  return valor.toFixed(2).replace(".", ",")
+// Formata centavos (inteiro) como reais no padrão brasileiro: "R$ 1.234,56".
+export function formatarReais(centavos: number): string {
+  return (centavos / 100).toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  })
 }
 
 // Prefixa caminhos de /public com o basePath do GitHub Pages quando

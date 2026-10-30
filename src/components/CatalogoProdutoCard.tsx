@@ -2,8 +2,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ImagemLazy } from "@/components/ImagemLazy";
 import type { Produto } from "@/data/produtos";
-import { precoFinal } from "@/data/produtos";
-import { formatarPreco } from "@/lib/utils";
+import { formatarReais } from "@/lib/utils";
 
 const CORES_SWATCH: Record<string, string> = {
   Preto: "#1a1a1a",
@@ -65,7 +64,7 @@ export function CatalogoProdutoCard({
 
         <div className="flex items-center justify-between pt-1">
           <p className="text-base font-semibold">
-            R$ {formatarPreco(precoFinal(produto))}
+            {formatarReais(produto.precoPixCentavos)}
           </p>
           <Button
             size="sm"

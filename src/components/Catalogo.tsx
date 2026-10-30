@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Search, SlidersHorizontal, X } from "lucide-react";
 import type { Produto } from "@/data/produtos";
-import { precoFinal } from "@/data/produtos";
 import { listarOpcoes, ordenarProdutos, type Ordenacao } from "@/lib/produtos-helpers";
 import {
   CatalogoFiltros,
@@ -71,9 +70,9 @@ export function Catalogo({ produtos }: { produtos: Produto[] }) {
       if (filtros.tamanho !== "todos" && !p.tamanhos.includes(filtros.tamanho))
         return false;
 
-      const preco = precoFinal(p);
-      if (filtros.precoMin && preco < Number(filtros.precoMin)) return false;
-      if (filtros.precoMax && preco > Number(filtros.precoMax)) return false;
+      const precoReais = p.precoPixCentavos / 100;
+      if (filtros.precoMin && precoReais < Number(filtros.precoMin)) return false;
+      if (filtros.precoMax && precoReais > Number(filtros.precoMax)) return false;
 
       if (termo && !`${p.nome} ${p.marca}`.toLowerCase().includes(termo)) {
         return false;

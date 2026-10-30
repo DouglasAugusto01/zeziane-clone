@@ -2,6 +2,8 @@ export type Genero = "masculino" | "feminino" | "unissex";
 
 export type Categoria = "Casual" | "Esportivo" | "Streetwear" | "Social";
 
+// Preços em CENTAVOS (inteiros) — evita erro de arredondamento. Para exibir,
+// use sempre formatarReais() de "@/lib/utils" (nunca aritmética com float).
 export type Produto = {
   id: string;
   nome: string;
@@ -10,11 +12,12 @@ export type Produto = {
   categoria: Categoria;
   cores: string[];
   descricao: string[];
-  preco_avista: number;
-  preco_aprazo: number;
-  preco_promocional_avista?: number;
+  precoPixCentavos: number;
+  precoParceladoCentavos: number;
   imagem: string;
   tamanhos: string[];
+  /** Mostrado em "Tênis em destaque" na página inicial. */
+  destaque: boolean;
 };
 
 export const produtos: Produto[] = [
@@ -26,10 +29,11 @@ export const produtos: Produto[] = [
     categoria: "Casual",
     cores: ["Preto"],
     descricao: ["Couro italiano certificado", "Solado anatômico Vibram"],
-    preco_avista: 149.9,
-    preco_aprazo: 169.9,
+    precoPixCentavos: 14990,
+    precoParceladoCentavos: 16990,
     imagem: "https://placehold.co/400x400?text=Icon+Low-Top",
     tamanhos: ["38", "39", "40", "41", "42", "43", "44"],
+    destaque: false,
   },
   {
     id: "2",
@@ -39,10 +43,11 @@ export const produtos: Produto[] = [
     categoria: "Social",
     cores: ["Preto"],
     descricao: ["Couro italiano certificado", "Solado anatômico Vibram"],
-    preco_avista: 219.9,
-    preco_aprazo: 249.9,
+    precoPixCentavos: 21990,
+    precoParceladoCentavos: 24990,
     imagem: "https://placehold.co/400x400?text=Chelsea+Boot",
     tamanhos: ["38", "39", "40", "41", "42", "43", "44"],
+    destaque: true,
   },
   {
     id: "3",
@@ -52,10 +57,11 @@ export const produtos: Produto[] = [
     categoria: "Casual",
     cores: ["Preto"],
     descricao: ["Couro italiano certificado", "Solado anatômico Vibram"],
-    preco_avista: 179.9,
-    preco_aprazo: 199.9,
+    precoPixCentavos: 17990,
+    precoParceladoCentavos: 19990,
     imagem: "https://placehold.co/400x400?text=Top+Minimal",
     tamanhos: ["38", "39", "40", "41", "42", "43", "44"],
+    destaque: true,
   },
   {
     id: "4",
@@ -65,10 +71,11 @@ export const produtos: Produto[] = [
     categoria: "Social",
     cores: ["Preto"],
     descricao: ["Couro italiano certificado", "Solado anatômico Vibram"],
-    preco_avista: 199.9,
-    preco_aprazo: 229.9,
+    precoPixCentavos: 19990,
+    precoParceladoCentavos: 22990,
     imagem: "https://placehold.co/400x400?text=Derby+Shoe",
     tamanhos: ["38", "39", "40", "41", "42", "43", "44"],
+    destaque: false,
   },
   {
     id: "5",
@@ -78,11 +85,11 @@ export const produtos: Produto[] = [
     categoria: "Esportivo",
     cores: ["Rosa"],
     descricao: ["Lançamento • primeira linha", "Rosa / Pink"],
-    preco_avista: 269.99,
-    preco_aprazo: 269.99,
-    preco_promocional_avista: 249.99,
+    precoPixCentavos: 24999,
+    precoParceladoCentavos: 26999,
     imagem: "/produtos/air-max-portal-rosa.jpg",
     tamanhos: ["34", "35", "36", "37", "38", "39"],
+    destaque: true,
   },
   {
     id: "6",
@@ -92,11 +99,11 @@ export const produtos: Produto[] = [
     categoria: "Esportivo",
     cores: ["Branco", "Preto"],
     descricao: ["Lançamento • primeira linha", "Branco / Preto"],
-    preco_avista: 269.99,
-    preco_aprazo: 269.99,
-    preco_promocional_avista: 249.99,
+    precoPixCentavos: 24999,
+    precoParceladoCentavos: 26999,
     imagem: "/produtos/air-max-portal-branco.jpg",
     tamanhos: ["34", "35", "36", "37", "38", "39"],
+    destaque: false,
   },
   {
     id: "7",
@@ -106,18 +113,14 @@ export const produtos: Produto[] = [
     categoria: "Streetwear",
     cores: ["Branco", "Preto"],
     descricao: ["Duas opções de cadarços", "Primeira linha", "Branco / Preto"],
-    preco_avista: 239.99,
-    preco_aprazo: 239.99,
-    preco_promocional_avista: 219.99,
+    precoPixCentavos: 21999,
+    precoParceladoCentavos: 23999,
     imagem: "/produtos/dunk-low-branco.jpg",
     tamanhos: ["38", "39", "40", "41", "42", "43"],
+    destaque: true,
   },
 ];
 
 export function getProdutoPorId(id: string): Produto | undefined {
   return produtos.find((p) => p.id === id);
-}
-
-export function precoFinal(produto: Produto): number {
-  return produto.preco_promocional_avista ?? produto.preco_avista;
 }
