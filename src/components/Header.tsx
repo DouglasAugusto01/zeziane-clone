@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Menu, ShoppingCart, X } from "lucide-react";
-import { usePreferencias } from "@/context/PreferenciasContext";
+import { useCarrinho } from "@/context/CarrinhoContext";
 
 const links = [
   { label: "Coleções", href: "/colecao" },
@@ -12,7 +12,7 @@ const links = [
 ];
 
 export function Header() {
-  const { itens } = usePreferencias();
+  const { itens, abrirCarrinho } = useCarrinho();
   const total = itens.reduce((acc, i) => acc + i.quantidade, 0);
   const [menuAberto, setMenuAberto] = useState(false);
 
@@ -56,10 +56,11 @@ export function Header() {
         </nav>
 
         <div className="flex shrink-0 items-center gap-2">
-          <a
-            href="#preferencias"
+          <button
+            type="button"
+            onClick={abrirCarrinho}
             className="relative flex size-9 items-center justify-center rounded-full border border-border transition-colors hover:bg-accent sm:size-10"
-            aria-label="Ver preferências selecionadas"
+            aria-label="Abrir carrinho"
           >
             <ShoppingCart className="size-4" />
             {total > 0 && (
@@ -67,7 +68,7 @@ export function Header() {
                 {total}
               </span>
             )}
-          </a>
+          </button>
 
           <button
             type="button"

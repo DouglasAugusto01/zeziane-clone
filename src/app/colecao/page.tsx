@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { produtos } from "@/data/produtos";
 import { Header } from "@/components/Header";
 import { Catalogo } from "@/components/Catalogo";
-import { PreferenciasSection } from "@/components/PreferenciasSection";
 
 export const metadata: Metadata = {
   title: "Nossa Coleção | NOVA Calçados Premium",
@@ -34,8 +33,6 @@ export default function ColecaoPage() {
       <section className="container mx-auto px-4 py-10 sm:px-6 sm:py-14">
         <Catalogo produtos={produtos} />
       </section>
-
-      <PreferenciasSection />
     </div>
   );
 }

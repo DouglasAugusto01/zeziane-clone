@@ -2,11 +2,10 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Minus, Plus } from "lucide-react";
 import type { Produto } from "@/data/produtos";
-import { precoFinal } from "@/data/produtos";
-import { formatarPreco } from "@/lib/utils";
-import { usePreferencias } from "@/context/PreferenciasContext";
+import { formatarReais } from "@/lib/utils";
+import { useCarrinho } from "@/context/CarrinhoContext";
 import { ImagemLazy } from "@/components/ImagemLazy";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { Button } from "@/components/ui/button";
@@ -20,13 +19,14 @@ const CORES_SWATCH: Record<string, string> = {
 };
 
 export function ProdutoDetalhe({ produto }: { produto: Produto }) {
-  const { adicionar } = usePreferencias();
+  const { adicionar, abrirCarrinho } = useCarrinho();
   const [tamanho, setTamanho] = useState(produto.tamanhos[0]);
   const [cor, setCor] = useState(produto.cores[0]);
+  const [quantidade, setQuantidade] = useState(1);
   const [adicionado, setAdicionado] = useState(false);
 
   const handleAdicionar = () => {
-    adicionar({ produto, tamanho, quantidade: 1 });
+    adicionar({ produto, cor, tamanho, quantidade });
     setAdicionado(true);
     setTimeout(() => setAdicionado(false), 1500);
   };
@@ -74,11 +74,11 @@ export function ProdutoDetalhe({ produto }: { produto: Produto }) {
 
           <div>
             <p className="text-2xl font-semibold">
-              R$ {formatarPreco(precoFinal(produto))}{" "}
+              {formatarReais(produto.precoPixCentavos)}{" "}
               <span className="text-sm font-normal text-muted-foreground">no Pix</span>
             </p>
             <p className="text-xs text-muted-foreground">
-              ou R$ {formatarPreco(produto.preco_aprazo)} em até 3x sem juros
+              ou {formatarReais(produto.precoParceladoCentavos)} em até 3x sem juros
             </p>
           </div>
 
@@ -128,16 +128,43 @@ export function ProdutoDetalhe({ produto }: { produto: Produto }) {
             </div>
           </div>
 
+          <div>
+            <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.15em] text-muted-foreground">
+              Quantidade
+            </p>
+            <div className="flex w-fit items-center rounded-full border border-border">
+              <button
+                type="button"
+                aria-label="Diminuir quantidade"
+                className="flex size-9 items-center justify-center text-muted-foreground hover:text-foreground"
+                onClick={() => setQuantidade((q) => Math.max(1, q - 1))}
+              >
+                <Minus className="size-3.5" />
+              </button>
+              <span className="w-8 text-center text-sm">{quantidade}</span>
+              <button
+                type="button"
+                aria-label="Aumentar quantidade"
+                className="flex size-9 items-center justify-center text-muted-foreground hover:text-foreground"
+                onClick={() => setQuantidade((q) => q + 1)}
+              >
+                <Plus className="size-3.5" />
+              </button>
+            </div>
+          </div>
+
           <div className="flex flex-col gap-3 pt-2 sm:flex-row">
             <Button
-              variant="outline"
-              className="flex-1 rounded-full border-foreground uppercase tracking-wide"
-              onClick={handleAdicionar}
+              className="flex-1 rounded-full bg-foreground text-background hover:bg-foreground/85"
+              onClick={() => {
+                handleAdicionar();
+                abrirCarrinho();
+              }}
             >
-              {adicionado ? "Adicionado!" : "Adicionar às preferências"}
+              {adicionado ? "Adicionado!" : "Adicionar ao carrinho"}
             </Button>
             <WhatsAppButton
-              itens={[{ produto, tamanho, quantidade: 1 }]}
+              itens={[{ produto, cor, tamanho, quantidade }]}
               className="flex-1"
             />
           </div>
