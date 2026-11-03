@@ -1,14 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Cormorant_Garamond } from "next/font/google";
-import { GoogleAnalytics } from "@next/third-parties/google";
 import "./globals.css";
 import { CarrinhoProvider } from "@/context/CarrinhoContext";
 import { CarrinhoDrawer } from "@/components/CarrinhoDrawer";
 import { BotaoWhatsAppFlutuante } from "@/components/BotaoWhatsAppFlutuante";
-
-// Só carrega o Google Analytics se o ID estiver configurado — em dev e em
-// forks/clones sem a variável definida, nada é carregado.
-const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+import { CookieConsent } from "@/components/CookieConsent";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -43,7 +39,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <CarrinhoDrawer />
           <BotaoWhatsAppFlutuante />
         </CarrinhoProvider>
-        {GA_MEASUREMENT_ID && <GoogleAnalytics gaId={GA_MEASUREMENT_ID} />}
+        <CookieConsent />
       </body>
     </html>
   );
