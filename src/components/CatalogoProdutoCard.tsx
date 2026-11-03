@@ -21,10 +21,16 @@ export function CatalogoProdutoCard({
 }) {
   return (
     <Link
-      href={`/produto/${produto.id}`}
-      className="animate-fade-in-up group block overflow-hidden rounded-2xl border border-border/70 bg-card transition-shadow hover:shadow-lg"
+      href={`/produto/${produto.slug}`}
+      className="animate-fade-in-up group relative block overflow-hidden rounded-2xl border border-border/70 bg-card transition-shadow hover:shadow-lg"
       style={{ animationDelay: `${Math.min(index, 8) * 60}ms` }}
     >
+      {produto.lancamento && (
+        <span className="absolute left-3 top-3 z-10 rounded-full bg-foreground px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-background">
+          Novo
+        </span>
+      )}
+
       <div className="aspect-square bg-secondary/50">
         <ImagemLazy
           src={produto.imagem}

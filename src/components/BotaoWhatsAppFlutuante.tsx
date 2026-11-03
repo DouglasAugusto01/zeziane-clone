@@ -1,23 +1,15 @@
 "use client";
 
 import { MessageCircle } from "lucide-react";
-
-// Mesmo número usado no botão "Falar com vendedor" — troque no .env.local
-// (NEXT_PUBLIC_WHATSAPP_NUMBER) para o número real da loja.
-const NUMERO_WHATSAPP =
-  process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "5500000000000";
+import { linkWhatsApp } from "@/lib/pedido";
 
 const MENSAGEM_PADRAO =
   "Olá! Vim pelo site da NOVA Calçados e gostaria de mais informações.";
 
 export function BotaoWhatsAppFlutuante() {
-  const link = `https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(
-    MENSAGEM_PADRAO
-  )}`;
-
   return (
     <a
-      href={link}
+      href={linkWhatsApp(MENSAGEM_PADRAO)}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Falar com a NOVA no WhatsApp"
