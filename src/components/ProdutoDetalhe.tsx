@@ -10,6 +10,7 @@ import {
   produtosRelacionados,
 } from "@/data/produtos";
 import { formatarReais, resolverImagem } from "@/lib/utils";
+import { rastrearAdicionarAoCarrinho } from "@/lib/analytics";
 import { useCarrinho } from "@/context/CarrinhoContext";
 import { ImagemLazy } from "@/components/ImagemLazy";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
@@ -29,7 +30,9 @@ export function ProdutoDetalhe({ produto }: { produto: Produto }) {
   const [linkCopiado, setLinkCopiado] = useState(false);
 
   const handleAdicionar = () => {
-    adicionar({ produto, cor, tamanho, quantidade });
+    const item = { produto, cor, tamanho, quantidade };
+    adicionar(item);
+    rastrearAdicionarAoCarrinho(item);
     setAdicionado(true);
     setTimeout(() => setAdicionado(false), 1500);
   };
