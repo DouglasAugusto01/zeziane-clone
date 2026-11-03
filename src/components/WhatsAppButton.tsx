@@ -4,6 +4,7 @@ import { MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { ItemCarrinho } from "@/context/CarrinhoContext";
 import { montarMensagemPedido, linkWhatsApp } from "@/lib/pedido";
+import { rastrearPedidoWhatsApp } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 
 export function WhatsAppButton({
@@ -17,6 +18,7 @@ export function WhatsAppButton({
 }) {
   const handleClick = () => {
     const mensagem = montarMensagemPedido(itens);
+    rastrearPedidoWhatsApp(itens);
     window.open(linkWhatsApp(mensagem), "_blank", "noopener,noreferrer");
   };
 
