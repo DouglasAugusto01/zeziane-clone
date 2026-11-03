@@ -1,10 +1,12 @@
-// Converte as fotos de /public/produtos para WebP comprimido/redimensionado.
-// Uso: npm run optimizar-imagens
+// Converte fotos de /public para WebP comprimido/redimensionado.
+// Uso: npm run optimizar-imagens -- [pasta-relativa-a-public]
+// Padrão: public/produtos. Ex: npm run optimizar-imagens -- equipe
 import { readdir, stat } from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
 
-const DIR = path.join(process.cwd(), "public", "produtos");
+const pastaArg = process.argv[2] ?? "produtos";
+const DIR = path.join(process.cwd(), "public", pastaArg);
 const LARGURA_MAX = 1200;
 const QUALIDADE = 78;
 
