@@ -1,7 +1,7 @@
 import { produtos } from "@/data/produtos";
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
-import { SobreNos } from "@/components/SobreNos";
+import { Diferenciais } from "@/components/Diferenciais";
 import { TenisDestaque } from "@/components/TenisDestaque";
 import { Footer } from "@/components/Footer";
 
@@ -10,7 +10,7 @@ export default function Home() {
     <div className="min-h-screen bg-background">
       <Header />
       <Hero />
-      <SobreNos />
+      <Diferenciais />
       <TenisDestaque produtos={produtos} />
       <Footer />
     </div>
