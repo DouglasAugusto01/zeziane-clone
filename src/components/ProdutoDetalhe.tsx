@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Check, ChevronLeft, Minus, Plus, Share2 } from "lucide-react";
 import {
+  CORES_SWATCH,
   type Produto,
   galeriaDoProduto,
   produtosRelacionados,
@@ -14,14 +15,6 @@ import { ImagemLazy } from "@/components/ImagemLazy";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { CatalogoProdutoCard } from "@/components/CatalogoProdutoCard";
 import { Button } from "@/components/ui/button";
-
-const CORES_SWATCH: Record<string, string> = {
-  Preto: "#1a1a1a",
-  Branco: "#f5f5f5",
-  Rosa: "#f472b6",
-  Vermelho: "#dc2626",
-  Azul: "#2563eb",
-};
 
 export function ProdutoDetalhe({ produto }: { produto: Produto }) {
   const { adicionar, abrirCarrinho } = useCarrinho();

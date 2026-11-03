@@ -2,6 +2,15 @@ export type Genero = "masculino" | "feminino" | "unissex";
 
 export type Categoria = "Casual" | "Esportivo" | "Streetwear" | "Social";
 
+/** Cor (nome em português) -> swatch visual, usado nos cards e na página do produto. */
+export const CORES_SWATCH: Record<string, string> = {
+  Preto: "#1a1a1a",
+  Branco: "#f5f5f5",
+  Rosa: "#f472b6",
+  Vermelho: "#dc2626",
+  Azul: "#2563eb",
+};
+
 // Preços em CENTAVOS (inteiros) — evita erro de arredondamento. Para exibir,
 // use sempre formatarReais() de "@/lib/utils" (nunca aritmética com float).
 export type Produto = {
@@ -102,7 +111,7 @@ export const produtos: Produto[] = [
     descricao: ["Lançamento • primeira linha", "Rosa / Pink"],
     precoPixCentavos: 24999,
     precoParceladoCentavos: 26999,
-    imagem: "/produtos/air-max-portal-rosa.jpg",
+    imagem: "/produtos/air-max-portal-rosa.webp",
     tamanhos: ["34", "35", "36", "37", "38", "39"],
     destaque: true,
     lancamento: true,
@@ -118,7 +127,7 @@ export const produtos: Produto[] = [
     descricao: ["Lançamento • primeira linha", "Branco / Preto"],
     precoPixCentavos: 24999,
     precoParceladoCentavos: 26999,
-    imagem: "/produtos/air-max-portal-branco.jpg",
+    imagem: "/produtos/air-max-portal-branco.webp",
     tamanhos: ["34", "35", "36", "37", "38", "39"],
     destaque: false,
     lancamento: true,
@@ -134,7 +143,7 @@ export const produtos: Produto[] = [
     descricao: ["Duas opções de cadarços", "Primeira linha", "Branco / Preto"],
     precoPixCentavos: 21999,
     precoParceladoCentavos: 23999,
-    imagem: "/produtos/dunk-low-branco.jpg",
+    imagem: "/produtos/dunk-low-branco.webp",
     tamanhos: ["38", "39", "40", "41", "42", "43"],
     destaque: true,
     lancamento: true,
