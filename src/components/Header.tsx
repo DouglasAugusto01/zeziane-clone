@@ -8,7 +8,7 @@ import { useCarrinho } from "@/context/CarrinhoContext";
 const links = [
   { label: "Coleções", href: "/colecao" },
   { label: "O Nosso Processo", href: "#processo" },
-  { label: "Sobre Nós", href: "#sobre" },
+  { label: "Sobre Nós", href: "/sobre" },
 ];
 
 export function Header() {
