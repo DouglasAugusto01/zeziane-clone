@@ -2,12 +2,17 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ChevronLeft, Minus, Plus } from "lucide-react";
-import type { Produto } from "@/data/produtos";
-import { formatarReais } from "@/lib/utils";
+import { Check, ChevronLeft, Minus, Plus, Share2 } from "lucide-react";
+import {
+  type Produto,
+  galeriaDoProduto,
+  produtosRelacionados,
+} from "@/data/produtos";
+import { formatarReais, resolverImagem } from "@/lib/utils";
 import { useCarrinho } from "@/context/CarrinhoContext";
 import { ImagemLazy } from "@/components/ImagemLazy";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
+import { CatalogoProdutoCard } from "@/components/CatalogoProdutoCard";
 import { Button } from "@/components/ui/button";
 
 const CORES_SWATCH: Record<string, string> = {
@@ -20,15 +25,42 @@ const CORES_SWATCH: Record<string, string> = {
 
 export function ProdutoDetalhe({ produto }: { produto: Produto }) {
   const { adicionar, abrirCarrinho } = useCarrinho();
+  const galeria = galeriaDoProduto(produto);
+  const relacionados = produtosRelacionados(produto);
+
   const [tamanho, setTamanho] = useState(produto.tamanhos[0]);
   const [cor, setCor] = useState(produto.cores[0]);
   const [quantidade, setQuantidade] = useState(1);
   const [adicionado, setAdicionado] = useState(false);
+  const [imagemAtiva, setImagemAtiva] = useState(0);
+  const [linkCopiado, setLinkCopiado] = useState(false);
 
   const handleAdicionar = () => {
     adicionar({ produto, cor, tamanho, quantidade });
     setAdicionado(true);
     setTimeout(() => setAdicionado(false), 1500);
+  };
+
+  const handleCompartilhar = async () => {
+    if (typeof window === "undefined") return;
+    const url = window.location.href;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: produto.nome, url });
+      } catch {
+        // usuário cancelou o compartilhamento — nada a fazer
+      }
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(url);
+      setLinkCopiado(true);
+      setTimeout(() => setLinkCopiado(false), 1500);
+    } catch {
+      // clipboard indisponível — ignora silenciosamente
+    }
   };
 
   return (
@@ -42,19 +74,68 @@ export function ProdutoDetalhe({ produto }: { produto: Produto }) {
       </Link>
 
       <div className="grid gap-10 md:grid-cols-2 md:items-start">
-        <div className="animate-fade-in-up aspect-square overflow-hidden rounded-3xl bg-secondary/50">
-          <ImagemLazy
-            src={produto.imagem}
-            alt={produto.nome}
-            className="h-full w-full object-contain p-8"
-          />
+        <div className="animate-fade-in-up space-y-3">
+          <div className="relative aspect-square overflow-hidden rounded-3xl bg-secondary/50">
+            {produto.lancamento && (
+              <span className="absolute left-4 top-4 z-10 rounded-full bg-foreground px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-background">
+                Novo
+              </span>
+            )}
+            <ImagemLazy
+              src={galeria[imagemAtiva]}
+              alt={produto.nome}
+              className="h-full w-full object-contain p-8"
+            />
+          </div>
+
+          {galeria.length > 1 && (
+            <div className="flex gap-2">
+              {galeria.map((src, i) => (
+                <button
+                  key={src}
+                  type="button"
+                  aria-label={`Ver foto ${i + 1}`}
+                  aria-pressed={imagemAtiva === i}
+                  onClick={() => setImagemAtiva(i)}
+                  className={`size-16 shrink-0 overflow-hidden rounded-xl border-2 bg-secondary/50 transition-colors ${
+                    imagemAtiva === i ? "border-foreground" : "border-transparent"
+                  }`}
+                >
+                  <img
+                    src={resolverImagem(src)}
+                    alt=""
+                    className="h-full w-full object-contain p-1.5"
+                  />
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="animate-fade-in-up space-y-6" style={{ animationDelay: "80ms" }}>
           <div>
-            <p className="text-[11px] font-medium uppercase tracking-[0.25em] text-muted-foreground">
-              {produto.marca} • {produto.categoria}
-            </p>
+            <div className="flex items-start justify-between gap-3">
+              <p className="text-[11px] font-medium uppercase tracking-[0.25em] text-muted-foreground">
+                {produto.marca} • {produto.categoria}
+              </p>
+              <button
+                type="button"
+                onClick={handleCompartilhar}
+                className="flex shrink-0 items-center gap-1.5 text-xs text-muted-foreground transition-colors hover:text-foreground"
+              >
+                {linkCopiado ? (
+                  <>
+                    <Check className="size-3.5" />
+                    Link copiado!
+                  </>
+                ) : (
+                  <>
+                    <Share2 className="size-3.5" />
+                    Compartilhar
+                  </>
+                )}
+              </button>
+            </div>
             <h1 className="mt-1 font-heading text-3xl font-semibold tracking-tight sm:text-4xl">
               {produto.nome}
             </h1>
@@ -106,9 +187,17 @@ export function ProdutoDetalhe({ produto }: { produto: Produto }) {
           )}
 
           <div>
-            <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.15em] text-muted-foreground">
-              Tamanho: {tamanho}
-            </p>
+            <div className="mb-2 flex items-center justify-between">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-muted-foreground">
+                Tamanho: {tamanho}
+              </p>
+              <Link
+                href="#guia-de-numeracao"
+                className="text-[11px] text-muted-foreground underline underline-offset-2 transition-colors hover:text-foreground"
+              >
+                Guia de numeração
+              </Link>
+            </div>
             <div className="flex flex-wrap gap-2">
               {produto.tamanhos.map((t) => (
                 <button
@@ -170,6 +259,19 @@ export function ProdutoDetalhe({ produto }: { produto: Produto }) {
           </div>
         </div>
       </div>
+
+      {relacionados.length > 0 && (
+        <div className="mt-16 border-t border-border pt-10">
+          <h2 className="mb-6 font-heading text-xl font-semibold tracking-tight sm:text-2xl">
+            Você também pode gostar
+          </h2>
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
+            {relacionados.map((p, index) => (
+              <CatalogoProdutoCard key={p.id} produto={p} index={index} />
+            ))}
+          </div>
+        </div>
+      )}
     </section>
   );
 }

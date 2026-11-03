@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Search, SlidersHorizontal, X } from "lucide-react";
-import type { Produto } from "@/data/produtos";
+import type { Genero, Produto } from "@/data/produtos";
 import { listarOpcoes, ordenarProdutos, type Ordenacao } from "@/lib/produtos-helpers";
 import {
   CatalogoFiltros,
@@ -27,15 +28,87 @@ const OPCOES_ORDENACAO: { label: string; value: Ordenacao }[] = [
   { label: "Mais recentes", value: "recentes" },
 ];
 
+const GENEROS_VALIDOS: (Genero | "todos")[] = [
+  "todos",
+  "masculino",
+  "feminino",
+  "unissex",
+];
+const ORDENACOES_VALIDAS: Ordenacao[] = [
+  "relevancia",
+  "menor-preco",
+  "maior-preco",
+  "nome",
+  "recentes",
+];
+
+function filtrosDaUrl(params: URLSearchParams): {
+  busca: string;
+  filtros: EstadoFiltros;
+  ordenacao: Ordenacao;
+} {
+  const genero = params.get("genero");
+  const ordenacao = params.get("ordenacao");
+
+  return {
+    busca: params.get("busca") ?? "",
+    filtros: {
+      marca: params.get("marca") ?? "todas",
+      categoria: params.get("categoria") ?? "todas",
+      genero: GENEROS_VALIDOS.includes(genero as Genero)
+        ? (genero as Genero)
+        : "todos",
+      cor: params.get("cor") ?? "todas",
+      tamanho: params.get("tamanho") ?? "todos",
+      precoMin: params.get("precoMin") ?? "",
+      precoMax: params.get("precoMax") ?? "",
+    },
+    ordenacao: ORDENACOES_VALIDAS.includes(ordenacao as Ordenacao)
+      ? (ordenacao as Ordenacao)
+      : "relevancia",
+  };
+}
+
+function urlDosFiltros(
+  busca: string,
+  filtros: EstadoFiltros,
+  ordenacao: Ordenacao
+): string {
+  const params = new URLSearchParams();
+  if (busca.trim()) params.set("busca", busca.trim());
+  if (filtros.marca !== "todas") params.set("marca", filtros.marca);
+  if (filtros.categoria !== "todas") params.set("categoria", filtros.categoria);
+  if (filtros.genero !== "todos") params.set("genero", filtros.genero);
+  if (filtros.cor !== "todas") params.set("cor", filtros.cor);
+  if (filtros.tamanho !== "todos") params.set("tamanho", filtros.tamanho);
+  if (filtros.precoMin) params.set("precoMin", filtros.precoMin);
+  if (filtros.precoMax) params.set("precoMax", filtros.precoMax);
+  if (ordenacao !== "relevancia") params.set("ordenacao", ordenacao);
+
+  const query = params.toString();
+  return query ? `/colecao?${query}` : "/colecao";
+}
+
 export function Catalogo({ produtos }: { produtos: Produto[] }) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const opcoes = useMemo(() => listarOpcoes(produtos), [produtos]);
 
-  const [busca, setBusca] = useState("");
-  const [filtros, setFiltros] = useState<EstadoFiltros>(FILTROS_VAZIOS);
-  const [ordenacao, setOrdenacao] = useState<Ordenacao>("relevancia");
+  const estadoInicial = useMemo(() => filtrosDaUrl(searchParams), []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const [busca, setBusca] = useState(estadoInicial.busca);
+  const [filtros, setFiltros] = useState<EstadoFiltros>(estadoInicial.filtros);
+  const [ordenacao, setOrdenacao] = useState<Ordenacao>(estadoInicial.ordenacao);
   const [drawerAberto, setDrawerAberto] = useState(false);
   const [carregando, setCarregando] = useState(true);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Mantém a URL em sincronia com os filtros (compartilhável/recarregável),
+  // substituindo a entrada atual do histórico em vez de empilhar uma nova
+  // a cada clique.
+  useEffect(() => {
+    router.replace(urlDosFiltros(busca, filtros, ordenacao), { scroll: false });
+  }, [busca, filtros, ordenacao, router]);
 
   // Breve carregamento simulado ao montar — dá feedback de progresso mesmo
   // sem uma requisição de rede real.
@@ -74,8 +147,20 @@ export function Catalogo({ produtos }: { produtos: Produto[] }) {
       if (filtros.precoMin && precoReais < Number(filtros.precoMin)) return false;
       if (filtros.precoMax && precoReais > Number(filtros.precoMax)) return false;
 
-      if (termo && !`${p.nome} ${p.marca}`.toLowerCase().includes(termo)) {
-        return false;
+      if (termo) {
+        // Busca "inteligente": também casa categoria, cor e gênero — não só
+        // nome/marca. Ex: "preto" ou "esportivo" encontram produtos mesmo
+        // que a palavra não esteja no nome comercial.
+        const alvo = [
+          p.nome,
+          p.marca,
+          p.categoria,
+          p.genero,
+          ...p.cores,
+        ]
+          .join(" ")
+          .toLowerCase();
+        if (!alvo.includes(termo)) return false;
       }
 
       return true;
@@ -105,9 +190,60 @@ export function Catalogo({ produtos }: { produtos: Produto[] }) {
     sinalizarCarregando();
   };
 
+  const generoLabel: Record<Genero, string> = {
+    masculino: "Masculino",
+    feminino: "Feminino",
+    unissex: "Unissex",
+  };
+
+  type ChaveEtiqueta =
+    | "busca"
+    | "marca"
+    | "categoria"
+    | "genero"
+    | "cor"
+    | "tamanho"
+    | "preco";
+
+  // Apenas dados (sem funções armazenadas) — o clique é tratado por
+  // removerEtiqueta() diretamente no JSX.
+  const etiquetas: { chave: ChaveEtiqueta; label: string }[] = [];
+  if (busca.trim()) etiquetas.push({ chave: "busca", label: `"${busca.trim()}"` });
+  if (filtros.marca !== "todas")
+    etiquetas.push({ chave: "marca", label: filtros.marca });
+  if (filtros.categoria !== "todas")
+    etiquetas.push({ chave: "categoria", label: filtros.categoria });
+  if (filtros.genero !== "todos")
+    etiquetas.push({ chave: "genero", label: generoLabel[filtros.genero] });
+  if (filtros.cor !== "todas") etiquetas.push({ chave: "cor", label: filtros.cor });
+  if (filtros.tamanho !== "todos")
+    etiquetas.push({ chave: "tamanho", label: `Tam. ${filtros.tamanho}` });
+  if (filtros.precoMin || filtros.precoMax)
+    etiquetas.push({
+      chave: "preco",
+      label: `R$ ${filtros.precoMin || opcoes.precoMin} – R$ ${
+        filtros.precoMax || opcoes.precoMax
+      }`,
+    });
+
+  const removerEtiqueta = (chave: ChaveEtiqueta) => {
+    if (chave === "busca") {
+      setBusca("");
+      sinalizarCarregando();
+    } else if (chave === "preco") {
+      atualizarFiltros({ precoMin: "", precoMax: "" });
+    } else if (chave === "genero") {
+      atualizarFiltros({ genero: "todos" });
+    } else if (chave === "tamanho") {
+      atualizarFiltros({ tamanho: "todos" });
+    } else {
+      atualizarFiltros({ [chave]: "todas" });
+    }
+  };
+
   return (
     <div>
-      <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="mb-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="relative flex-1 sm:max-w-sm">
           <Search className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
           <input
@@ -117,7 +253,7 @@ export function Catalogo({ produtos }: { produtos: Produto[] }) {
               setBusca(e.target.value);
               sinalizarCarregando();
             }}
-            placeholder="Buscar por nome ou marca..."
+            placeholder="Buscar por nome, marca, cor..."
             className="w-full rounded-full border border-border bg-card py-2.5 pl-10 pr-4 text-sm outline-none transition-colors focus:border-foreground"
           />
         </div>
@@ -152,6 +288,22 @@ export function Catalogo({ produtos }: { produtos: Produto[] }) {
           </Select>
         </div>
       </div>
+
+      {etiquetas.length > 0 && (
+        <div className="mb-6 flex flex-wrap items-center gap-2">
+          {etiquetas.map((e) => (
+            <button
+              key={e.chave}
+              type="button"
+              onClick={() => removerEtiqueta(e.chave)}
+              className="flex items-center gap-1.5 rounded-full border border-border bg-card py-1 pl-3 pr-2 text-xs text-foreground/80 transition-colors hover:border-foreground/40"
+            >
+              {e.label}
+              <X className="size-3" />
+            </button>
+          ))}
+        </div>
+      )}
 
       <div className="grid gap-10 lg:grid-cols-[240px_1fr]">
         <aside className="hidden lg:block">

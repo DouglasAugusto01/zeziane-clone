@@ -1,6 +1,15 @@
 import type { ItemCarrinho } from "@/context/CarrinhoContext";
 import { formatarReais } from "@/lib/utils";
 
+// Número de WhatsApp da loja (DDI + DDD + número, só dígitos).
+// Troque pelo número real no arquivo .env.local (NEXT_PUBLIC_WHATSAPP_NUMBER).
+export const NUMERO_WHATSAPP =
+  process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "5500000000000";
+
+export function linkWhatsApp(mensagem: string): string {
+  return `https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(mensagem)}`;
+}
+
 export function calcularTotais(itens: ItemCarrinho[]) {
   const totalPixCentavos = itens.reduce(
     (acc, i) => acc + i.produto.precoPixCentavos * i.quantidade,

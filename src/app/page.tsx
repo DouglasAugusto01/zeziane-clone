@@ -3,6 +3,7 @@ import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { Diferenciais } from "@/components/Diferenciais";
 import { TenisDestaque } from "@/components/TenisDestaque";
+import { Footer } from "@/components/Footer";
 
 export default function Home() {
   return (
@@ -11,6 +12,7 @@ export default function Home() {
       <Hero />
       <Diferenciais />
       <TenisDestaque produtos={produtos} />
+      <Footer />
     </div>
   );
 }
