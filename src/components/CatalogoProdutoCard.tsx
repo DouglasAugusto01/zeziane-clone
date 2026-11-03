@@ -1,16 +1,8 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ImagemLazy } from "@/components/ImagemLazy";
-import type { Produto } from "@/data/produtos";
+import { CORES_SWATCH, type Produto } from "@/data/produtos";
 import { formatarReais } from "@/lib/utils";
-
-const CORES_SWATCH: Record<string, string> = {
-  Preto: "#1a1a1a",
-  Branco: "#f5f5f5",
-  Rosa: "#f472b6",
-  Vermelho: "#dc2626",
-  Azul: "#2563eb",
-};
 
 export function CatalogoProdutoCard({
   produto,

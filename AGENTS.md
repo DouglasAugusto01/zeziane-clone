@@ -23,13 +23,36 @@ este padrão:
 3. **Criar uma branch** a partir de `main` para o trabalho (ex:
    `feature/nome-da-tarefa`, `fix/nome-do-bug`).
 4. **Implementar e commitar na branch**, testando antes de finalizar
-   (build, navegação, filtros, responsividade, imagens).
+   (`npm run lint`, `npm test`, `npm run build`, navegação, filtros,
+   responsividade, imagens).
 5. **Abrir um Pull Request** da branch para `main`, mencionando a Issue na
    descrição (ex: `Closes #N`), para que o GitHub feche a Issue
    automaticamente ao mesclar.
-6. **Mesclar o PR** e então gerar o build estático
-   (`GH_PAGES=true npm run build`) e publicar a pasta `out/` na branch
-   `gh-pages` (GitHub Pages), como já documentado no README.
+6. **Mesclar o PR.** O deploy é automático a partir daqui — não rode mais
+   o build/push manual para `gh-pages`.
+
+## Deploy (automático, não manual)
+
+Desde a Issue #10, o deploy é feito por `.github/workflows/deploy.yml`:
+todo push em `main` builda (`lint` → `test` → `build`) e publica no GitHub
+Pages via Actions (`actions/deploy-pages`). Pull Requests rodam o mesmo
+lint/test/build como gate, mas não publicam. **Não existe mais push manual
+para a branch `gh-pages`** — se algo parecer desatualizado, confira a aba
+Actions do repositório antes de tentar publicar à mão.
+
+A variável `NEXT_PUBLIC_WHATSAPP_NUMBER` usada no build do CI vem de uma
+*repository variable* do GitHub (`gh variable list`), não do `.env.local`
+(que só existe localmente e nunca é commitado).
+
+## Testes
+
+Funções puras (cálculo de totais, mensagem do WhatsApp, ordenação/filtros,
+lógica do carrinho) ficam em `src/lib/` e têm testes Vitest ao lado
+(`*.test.ts`). Rode com `npm test`. Ao adicionar lógica nova desse tipo,
+adicione o teste correspondente — é isso que o CI usa como gate antes de
+publicar.
+
+## Arquitetura estática / GitHub Pages
 
 Este projeto usa Next.js App Router com export estático (`output: "export"`)
 para publicação no GitHub Pages com `basePath`. Páginas novas com rotas
@@ -37,5 +60,8 @@ dinâmicas precisam de `generateStaticParams()`. Imagens locais em `/public`
 usadas em tags `<img>` precisam passar por `resolverImagem()` /
 `withBasePath()` (`src/lib/utils.ts`) para funcionar corretamente sob o
 `basePath` do GitHub Pages — tags `<img>` não recebem esse prefixo
-automaticamente (diferente de `next/link` e `next/image`).
+automaticamente (diferente de `next/link` e `next/image`). Fotos novas de
+produto devem ser adicionadas em `/public/produtos` e otimizadas com
+`npm run optimizar-imagens` (gera `.webp` comprimido) antes de referenciar
+em `src/data/produtos.ts`.
 
