@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { resolverImagem, cn } from "@/lib/utils";
 
@@ -14,6 +14,14 @@ export function ImagemLazy({
   className?: string;
 }) {
   const [carregada, setCarregada] = useState(false);
+  const imgRef = useRef<HTMLImageElement>(null);
+
+  // Se a imagem já veio do cache do navegador, o evento "load" pode disparar
+  // antes do React conseguir anexar o onLoad — checamos .complete ao montar
+  // para não deixar o skeleton preso para sempre nesse caso.
+  useEffect(() => {
+    if (imgRef.current?.complete) setCarregada(true);
+  }, []);
 
   return (
     <div className="relative h-full w-full">
@@ -21,6 +29,7 @@ export function ImagemLazy({
         <Skeleton className="absolute inset-0 h-full w-full rounded-none" />
       )}
       <img
+        ref={imgRef}
         src={resolverImagem(src)}
         alt={alt}
         loading="lazy"
