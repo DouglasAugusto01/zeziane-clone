@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { MessageCircle } from "lucide-react";
 import { linkWhatsApp } from "@/lib/pedido";
 
@@ -78,10 +79,26 @@ export function Footer() {
             até 3x sem juros, confirmado com o vendedor.
           </Sanfona>
           <Sanfona titulo="Privacidade">
-            Este site usa o Google Analytics para entender como os visitantes
-            navegam pelo catálogo (páginas vistas, buscas, filtros). Nenhum
-            dado de pagamento é coletado aqui — pedidos são sempre fechados
-            diretamente com o vendedor pelo WhatsApp.
+            <p className="mb-2">
+              Este site usa o Google Analytics (com o seu consentimento) para
+              entender como os visitantes navegam. Nenhum dado de pagamento é
+              coletado aqui — pedidos são sempre fechados diretamente com o
+              vendedor pelo WhatsApp.
+            </p>
+            <div className="flex flex-wrap gap-x-3 gap-y-1">
+              <Link
+                href="/politica-de-privacidade"
+                className="underline underline-offset-2 hover:text-foreground"
+              >
+                Política de Privacidade
+              </Link>
+              <Link
+                href="/politica-de-cookies"
+                className="underline underline-offset-2 hover:text-foreground"
+              >
+                Política de Cookies
+              </Link>
+            </div>
           </Sanfona>
         </div>
 

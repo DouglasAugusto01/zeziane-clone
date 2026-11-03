@@ -11,6 +11,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const paginasFixas: MetadataRoute.Sitemap = [
     { url: `${SITE_URL}/`, priority: 1 },
     { url: `${SITE_URL}/colecao`, priority: 0.9 },
+    { url: `${SITE_URL}/politica-de-privacidade`, priority: 0.3 },
+    { url: `${SITE_URL}/politica-de-cookies`, priority: 0.3 },
   ];
 
   const paginasDeProduto: MetadataRoute.Sitemap = produtos.map((produto) => ({
