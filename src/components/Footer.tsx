@@ -77,6 +77,12 @@ export function Footer() {
             Pix (com o valor à vista mostrado em cada produto) ou parcelado em
             até 3x sem juros, confirmado com o vendedor.
           </Sanfona>
+          <Sanfona titulo="Privacidade">
+            Este site usa o Google Analytics para entender como os visitantes
+            navegam pelo catálogo (páginas vistas, buscas, filtros). Nenhum
+            dado de pagamento é coletado aqui — pedidos são sempre fechados
+            diretamente com o vendedor pelo WhatsApp.
+          </Sanfona>
         </div>
 
         <div id="guia-de-numeracao">
