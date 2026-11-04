@@ -143,6 +143,18 @@ export function Footer() {
         © {new Date().getFullYear()} NOVA Calçados Premium — catálogo digital
         com pedidos via WhatsApp.
       </div>
+
+      <div className="border-t border-border/70 px-4 py-3 text-center text-[11px] text-muted-foreground sm:px-6">
+        Desenvolvido por{" "}
+        <a
+          href="https://douglasaugusto01.github.io/perfildev/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline underline-offset-2 hover:text-foreground"
+        >
+          Douglas Augusto
+        </a>
+      </div>
     </footer>
   );
 }
