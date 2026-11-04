@@ -4,6 +4,7 @@ import { Footprints, MessageCircle, Sparkles } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
+import { LINK_GRUPO_WHATSAPP } from "@/lib/empresa";
 
 export const metadata: Metadata = {
   title: "Sobre Nós | NOVA Calçados Premium",
@@ -91,6 +92,26 @@ export default function SobrePage() {
         >
           <Link href="/colecao">Ver Coleção</Link>
         </Button>
+
+        <div className="mt-4">
+          <a
+            href={LINK_GRUPO_WHATSAPP}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center rounded-full bg-green-600 px-8 py-3 text-xs font-semibold uppercase tracking-[0.15em] text-white transition-colors hover:bg-green-500"
+          >
+            Entrar no grupo de promoções
+          </a>
+        </div>
+
+        <p className="mt-5 text-xs text-muted-foreground">
+          <Link
+            href="/politica-de-privacidade"
+            className="underline underline-offset-2 transition-colors hover:text-foreground"
+          >
+            Política de Privacidade
+          </Link>
+        </p>
       </section>
 
       <Footer />

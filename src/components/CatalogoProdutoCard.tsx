@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ImagemLazy } from "@/components/ImagemLazy";
-import { CORES_SWATCH, type Produto } from "@/data/produtos";
+import { ProdutoCardGaleria } from "@/components/ProdutoCardGaleria";
+import { CORES_SWATCH, type Produto, galeriaDoProduto } from "@/data/produtos";
 import { formatarReais } from "@/lib/utils";
 
 export function CatalogoProdutoCard({
@@ -24,10 +24,9 @@ export function CatalogoProdutoCard({
       )}
 
       <div className="aspect-square bg-secondary/50">
-        <ImagemLazy
-          src={produto.imagem}
+        <ProdutoCardGaleria
+          imagens={galeriaDoProduto(produto)}
           alt={produto.nome}
-          className="h-full w-full object-contain p-6 transition-transform duration-500 group-hover:scale-105"
         />
       </div>
 

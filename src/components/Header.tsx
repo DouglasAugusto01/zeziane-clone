@@ -6,8 +6,8 @@ import { Menu, ShoppingCart, X } from "lucide-react";
 import { useCarrinho } from "@/context/CarrinhoContext";
 
 const links = [
+  { label: "Início", href: "/" },
   { label: "Coleções", href: "/colecao" },
-  { label: "O Nosso Processo", href: "#processo" },
   { label: "Sobre Nós", href: "/sobre" },
 ];
 
